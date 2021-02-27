@@ -1,0 +1,37 @@
+'''
+Maezy Haldeman: maezy.haldeman@und.edu
+CS 161: CompSci II
+Lab 2
+ID#: 1325352
+
+
+
+'''
+
+class FlexibleArray:
+    
+    def __init__(self, lowIndex, highIndex, defaultValue = None):
+        
+        self.__maxSize = (highIndex - lowIndex) #the total number of AVAILABLE indexes we want in the list using the user range
+        self.__ourList = [defaultValue] * self.__maxSize #creating a list with the maxSize number of indexes, every value in the list being 'None'
+        self.__highIndex = highIndex
+        self.__lowIndex = lowIndex
+    
+    #def get(self, index): # return the value at the specified index
+        
+    
+    def set(self, userIndex, value): #assigns a value to the specified index
+        
+        if self.__lowIndex <= userIndex <= self.__highIndex:
+            
+            ourIndex = (self.__highIndex - userIndex) #turns the user index (range 1980 to 2020) into our index (range 0 to 40)
+            self.__ourList[ourIndex] = value #assigns the user value to our index
+           
+            return True
+        
+        else:
+            
+            return False
+        
+        
+        

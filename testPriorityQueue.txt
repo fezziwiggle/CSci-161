@@ -1,0 +1,32 @@
+'''
+Maezy Haldeman: maezy.haldeman@und.edu
+CS 161: CompSci II
+Lab 3b
+ID#: 1325352
+
+
+'''
+
+from PriorityQueue import *
+
+def main():
+    
+    queue1 = PriorityQueue(5)
+    
+    queue1.enqueue('a', 90) #expand these tests, don't miss anything
+    queue1.enqueue('b', 100)
+    queue1.enqueue('c', 100)
+    queue1.enqueue('d')
+    queue1.enqueue('e', 50)
+    
+    try:
+        while not queue1.isEmpty():
+            temp = queue1.dequeue()
+            print(temp)
+    except PriorityQueueException as e:
+        print('This will catch a dequeue error')
+    except Exception as e:
+        print('Error from something other than PriorityQueue')
+
+    
+main()

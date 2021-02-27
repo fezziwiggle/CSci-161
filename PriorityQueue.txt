@@ -1,0 +1,88 @@
+'''
+Maezy Haldeman: maezy.haldeman@und.edu
+CS 161: CompSci II
+Lab 3b
+ID#: 1325352
+
+
+'''
+
+class PriorityQueueException (Exception):
+    pass
+
+class PriorityQueue:
+    
+    #-------------------------------------------------------------
+    class __Node:                                                
+        
+        def __init__(self, item, priority):
+            self.item = item
+            self.priority = priority
+            
+        def setPriority(self, priority):
+            self.priority = priority
+    #-------------------------------------------------------------
+
+    def __init__ (self, maxSize=100):
+        self.__queue = [-1] * maxSize #OUR LIST
+        self.__maxSize = maxSize      
+        self.__numOfItems = 0           
+
+
+    def enqueue (self, itemToQueue, priority = 1): #needs to insert itemToQueue BEFORE all items with a lower priority value, or AFTER all items with a higher OR equal prioty value.
+        if not self.isFull() and 1 <= priority <= 100:
+            self.__queue[self.__numOfItems] = PriorityQueue.__Node(itemToQueue, priority)
+            self.__numOfItems += 1                                
+            
+            for index in range(self.__numOfItems):
+                if priority > self.__queue[index].priority:
+                    
+                    
+                    for index2 in range (index, self.__numOfItems): 
+                        self.__queue[index2 + 1] = self.__queue[index2]
+                        self.__queue[index] = itemToQueue
+                        
+                        break 
+                    
+                    #self.__numOfItems += 1                    
+            
+            #self.__queue[self.__numOfItems] = itemToQueue
+            
+        elif self.isFull():   
+            raise PriorityQueueException ("Unable to enqueue " + itemToQueue + " to a full queue")    
+        else:
+            raise PriorityQueueException ('Unable to enqueue ' + itemToQueue + ' with an out-of-range priority')
+
+
+    def dequeue (self):
+        if not self.isEmpty():
+            itemToReturn = self.__queue[0]
+            #for index in range (1, self.__numOfItems):
+            #    self.__queue[index - 1] = self.__queue[index]
+            for index in range (0, self.__numOfItems - 1): #this loop is functionally identical to the previous loop
+                self.__queue[index] = self.__queue[index + 1]
+            self.__numOfItems -= 1
+            return itemToReturn
+        else:   
+            raise PriorityQueueException ("Unable to dequeue from an empty queue")   
+        
+
+    def isFull (self): #is there room to add any more information?
+        return self.__numOfItems == self.__maxSize
+
+
+    def isEmpty(self):
+        return self.__numOfItems == 0
+
+
+    def maxSize (self): #returns the size of the list - the maximum number of items that can be in the list
+        return maxSize # or return len(self.__data)
+
+
+    def __str__ (self):
+        strToReturn = "Queue: "
+        for index in range (self.__numOfItems):
+            strToReturn += str(self.__queue[index]) + " " 
+        return strToReturn   
+
+

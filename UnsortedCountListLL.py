@@ -1,0 +1,224 @@
+'''
+Maezy Haldeman: maezy.haldeman@und.edu
+CS 161: CompSci II
+Lab 8a
+ID#: 1325352
+
+This program takes the original class UnsortedCountList and is rewritten to work
+with a linked list rather than a regular list, allowing the user to set the maxSize
+and add/remove items from the list, including incrementing/decrementing the itemCount of 
+preexisting items.
+
+'''
+
+class UnsortedCountListLLAddError (Exception):
+   pass
+
+class UnsortedCountListLLGetNextItemError(Exception):
+   pass
+
+class UnsortedCountListLL:
+   
+   #-------------------------------------------------------------
+   class __Node:                                                
+
+      def __init__(self, item, itemCount=0): #when a duplicate item is added, make sure to increment self.itemCount somewhere in the main class
+         self.item = item
+         self.itemCount = itemCount
+         self.next = None
+
+      def setCount(self, itemCount):
+         self.itemCount = itemCount
+   #-------------------------------------------------------------
+   
+   def __init__ (self, maxSize = 100):
+      #self.__data = [None] * maxSize #create the entire list, with each item having the value None
+      self.__maxSize = maxSize
+      self.__numOfItems = 0
+      self.__currentItem = None #currentItem starts at the first node
+      self.__nextLocation = 0 #used to track which item to return in our __next__ function
+      
+      self.__head = None #will know where the first item in the list is at
+      self.__tail = None #will know where the last item in the list is at
+      self.__iterationNode = None      
+      
+
+   def __iter__ (self):
+      self.__iterationNode = self.__head 
+      return self #tells the built in for loop that the __next__ function will be in this object
+
+
+   def __next__(self):
+      if self.__iterationNode == None:
+         self.__iterationNode = self.__head #set the variable up to start at the beginning the next time the for loop is used 
+         raise StopIteration
+      itemToReturn = self.__iterationNode.value
+      self.__iterationNode = self.__iterationNode.next 
+      return itemToReturn    
+
+
+   #----REWRITTEN----   
+   def add (self, itemToAdd): #returns True if an item was added (there was room to add it), otherwise returns False
+      if not self.isFull():
+         itemOccurrences = 0
+         
+         if self.isEmpty(): #if the linked list is empty, create a new node and set it to be the head
+            itemOccurrences = 1            
+            newNode = UnsortedCountListLL.__Node(itemToAdd, itemOccurrences) #itemOccurences is being set here for the node
+            self.__head = newNode
+            self.__tail = newNode            
+            self.__numOfItems += 1
+         
+         elif self.__head.item == itemToAdd: #if the list is not empty, check if itemToAdd is the first item (and increment count if so)
+            #self.__head = newNode
+            self.__head.itemCount += 1            
+            
+         else: #if itemToAdd is not the first item, start going through the list to either increment an existing node or create a new one
+            location = self.__head.next
+            
+            while location != None: #while there is a next item
+               if location.item == itemToAdd: #itemToAdd is already a node, so increment item count
+                  itemOccurrences = location.itemCount
+                  itemOccurrences += 1
+                  location.itemCount = itemOccurrences
+                  break
+               location = location.next
+               
+            if location == None: #itemToAdd is not already a node in the list, so add a new node to the end
+               itemOccurrences = 1
+               newNode = UnsortedCountListLL.__Node(itemToAdd, itemOccurrences)
+               
+               self.__tail.next = newNode
+               self.__numOfItems += 1
+               self.__tail = newNode
+               
+         return True
+               
+      else:
+         return False
+         
+      
+   #----REWRITTEN----
+   def remove (self, itemToRemove):
+            
+      if not self.isEmpty():
+         
+         if self.__head.item == itemToRemove: #the first node is the itemToRemove
+            if self.__head.itemCount > 1: #if the itemCount of itemToAdd is more than 1, decrement itemCount
+               self.__head.itemCount -= 1
+            else: #otherwise, delete that node by making the next node the head
+               self.__head = self.__head.next
+               if self.__tail.item == itemToRemove:
+                  self.__tail = None
+               self.__numOfItems -= 1
+            return True
+         
+         else: #the first node is not the item to remove, so start looking in the other nodes
+            location = self.__head.next
+            prevLoc = self.__head
+            
+            while location != None:
+               if location.item == itemToRemove:
+                  if location.itemCount > 1: #if the itemCount of itemToAdd is more than 1, decrement itemCount
+                     location.itemCount -= 1
+                  else: #otherwise, delete that node by making the next node the head
+                     prevLoc.next = location.next
+                     self.__numOfItems -= 1   
+                  #location = location.next               
+                  return True
+               else:
+                  prevLoc = location
+                  location = location.next
+            
+            return False #itemToRemove is not a node in the list, so return false
+         
+      return False 
+      
+   
+   #----REWRITTEN----
+   def isInList (self, itemToFind):
+      if not self.isEmpty():
+         if self.__head.item == itemToFind:
+            return True
+         else:
+            location = self.__head.next
+            while location != None:
+               if location.item == itemToFind:
+                  return True
+               location = location.next                  
+            return False
+      
+      return False
+   
+      
+   #----REWRITTEN----   
+   def isFull (self): #is there room to add any more information?
+      return self.__numOfItems == self.__maxSize
+ 
+   
+   #----REWRITTEN----   
+   def isEmpty(self):
+      return self.__numOfItems == 0
+ 
+   
+   #----REWRITTEN----      
+   def maxSize (self): #returns the size of the list - the maximum number of items that can be in the list
+      return maxSize # or return len(self.__data)
+ 
+ 
+   #----REWRITTEN----   
+   def size (self): #returns the number of UNIQUE items in the list
+      return self.__numOfItems
+ 
+ 
+   #----REWRITTEN----   
+   def overallCount(self): #returns the total number of all items in the list (sum of all items' itemCount)
+      overallCount = 0
+      if not self.isEmpty():
+         location = self.__head
+         while location != None:
+            overallCount += location.itemCount
+            location = location.next
+      return overallCount
+ 
+   
+   #----REWRITTEN----   
+   def count(self, item): #returns the itemCount of a specific item in the list
+      count = 0
+      if not self.isEmpty():
+         if self.__head.item == item:
+            count = self.__head.itemCount
+         else:
+            location = self.__head.next
+            while location != None:
+               if location.item == item:
+                  count = location.itemCount
+               location = location.next         
+      return count
+ 
+   
+   #----REWRITTEN----   
+   def reset(self):
+      self.__currentItem = None
+ 
+ 
+   #----REWRITTEN----   
+   def getNextItem(self):
+      
+      if not self.isEmpty():
+         if self.__currentItem == None: #are we starting from the first node
+            self.__currentItem = self.__head #if so, current item is the head node
+            temp = self.__currentItem.item #grab the item from the node
+            
+         else: #we are not starting from the first node
+            self.__currentItem = self.__currentItem.next
+            if self.__currentItem != None:
+               temp = self.__currentItem.item
+            
+         return temp 
+      
+      else:
+         raise UnsortedCountListLLGetNextItemError('getNextItem error: cannot return nodes from an empty list')
+      
+      
+      

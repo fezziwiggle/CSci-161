@@ -1,0 +1,72 @@
+'''
+Maezy Haldeman: maezy.haldeman@und.edu
+CS 161: CompSci II
+Lab 10a
+ID#: 1325352
+
+
+
+'''
+
+from MyBSTree import *
+
+def main ():
+    tree = MyBSTree()
+    print ("Is tree empty - should be true: ", tree.isEmpty())
+    print ("Number of nodes - should be 0: ", tree.size())
+    print()
+    
+    tree.insert ("m")
+    tree.insert ("b")
+    tree.insert ("e")
+    tree.insert ("d")
+    tree.insert ("a")
+    tree.insert ("s")
+    tree.insert ("t")
+    tree.insert ("o")
+    tree.recUniqueInsert ("r")
+    print()
+    
+    print ("Was g actually added? ", tree.recInsert ("g"))
+    print ("Was g actually added? ", tree.recInsert ("g"))
+    print()
+    
+    print ("Is tree empty - should be false: ", tree.isEmpty())
+    print ("Number of nodes - should be 8: ", tree.size())
+    print()
+    
+    #print ("Is m in the list? ", tree.isInList ("m"))
+    #print ("Is a in the list? ", tree.isInList ("a"))
+    #print ("Is q in the list? ", tree.isInList ("q"))
+    
+    print ("Is m in the list? ", tree.recIsInList ("m"))
+    print ("Is a in the list? ", tree.recIsInList ("a"))
+    print ("Is q in the list? ", tree.recIsInList ("q"))
+    print()
+    
+    tree.inOrder()
+    tree.postOrder()
+    print()
+    print()
+    
+    print('Minimum value:', tree.min())
+    print('Maximum value:', tree.max())
+    print()
+    
+    print('Number of leaves in the tree:', tree.numOfLeaves())
+    print('Height of the tree:', tree.height()) #  !!! FIX THIS !!!
+    print('Is the tree complete?', tree.complete())
+    print()
+    
+    print('Adding "n" to the tree...')
+    tree.insert ("n")
+    print('Adding "f" to the tree...')
+    tree.insert ("f")    
+    print()
+    
+    print('Height of the tree:', tree.height())
+    print('Is the tree complete?', tree.complete())
+    
+    
+    
+main()   

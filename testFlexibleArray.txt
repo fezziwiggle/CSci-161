@@ -1,0 +1,21 @@
+'''
+Maezy Haldeman: maezy.haldeman@und.edu
+CS 161: CompSci II
+Lab 2
+ID#: 1325352
+
+
+
+'''
+from FlexibleArray import FlexibleArray
+
+def main():
+    
+    fA1 = FlexibleArray(1980, 2020)
+    
+    FlexibleArray.set(2002, 'Maezy')
+    
+    
+    #print(fA1.get(2002))
+    
+main()
